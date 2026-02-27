@@ -1,327 +1,162 @@
-🌐 REST API Best Practices (For ML Systems)
-🎯 Objective
-
-Design REST APIs that are:
-
-Predictable
-
-Scalable
-
-Secure
-
-Versioned
-
-Maintainable
-
-And suitable for:
-
-ML inference endpoints
-
-SaaS dashboards
-
-Model management systems
-
-🧠 Part 1 — REST Fundamentals
-1. What REST Actually Is
+REST API Best Practices — Roadmap + Free Resources
+Phase 1 — REST & HTTP Foundations
+1. REST Principles
 
 Learn:
 
-REST = Representational State Transfer
-
-Stateless architecture
+Statelessness
 
 Resource-based URLs
 
-HTTP verbs matter
+Client–server separation
 
-Key concept:
-Every request must contain all information needed.
-No server memory of client state.
+Uniform interface
 
-Why it matters for ML:
-Your /predict endpoint should not depend on previous calls.
+Resources:
 
-Free resources:
+RESTful API Design (Microsoft)
+https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design
+
+What is REST (freeCodeCamp)
+https://www.freecodecamp.org/news/rest-api-design-best-practices-build-a-rest-api/
+
+2. HTTP Methods & Status Codes
+
+Learn:
+
+GET, POST, PUT, PATCH, DELETE
+
+Idempotency
+
+Proper status codes (200, 201, 204, 400, 401, 403, 404, 429, 500)
+
+Resources:
 
 MDN HTTP Methods
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 
-“What is REST?” (freeCodeCamp)
+MDN HTTP Status Codes
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 
-2. HTTP Methods — Use Them Correctly
+Phase 2 — Resource-Oriented Design
+3. URL Structure Best Practices
 
-Learn the difference:
+Learn:
 
-GET → fetch data
+Nouns, not verbs
 
-POST → create resource
+Plural resource naming
 
-PUT → replace resource
+Nested resources
 
-PATCH → update partially
+Query parameters
 
-DELETE → remove resource
+Resources:
 
-Bad design:
+REST Naming Conventions
+https://restfulapi.net/resource-naming/
 
-POST /getPrediction
+Google API Design Guide
+https://cloud.google.com/apis/design
 
-Correct:
+4. Query Parameters & Filtering
 
-POST /predictions
+Learn:
 
-Fetching prediction result:
+Pagination (?page=, ?limit=)
 
-GET /predictions/{id}
+Filtering (?status=active)
 
-Understand:
-Verbs are not decoration. They communicate intent.
+Sorting (?sort=createdAt)
 
-🏗 Part 2 — Resource-Based Design
-3. URL Structure
+Resources:
 
-Rules:
+Pagination Best Practices
+https://nordicapis.com/restful-api-pagination-best-practices/
 
-Use nouns, not verbs
-
-Use plural resources
-
-Keep hierarchy logical
-
-Example (ML system):
-
-/models
-/models/{id}
-/models/{id}/versions
-/predictions
-/users/{id}
-/users/{id}/subscriptions
-
-Avoid:
-
-/createModel
-/updateUserData
-/doPredictionNow
-
-Your API should read like a data structure.
-
-4. Status Codes (Critical)
-
-Learn and memorize:
-
-200 → OK
-
-201 → Created
-
-204 → No Content
-
-400 → Bad Request
-
-401 → Unauthorized
-
-403 → Forbidden
-
-404 → Not Found
-
-429 → Too Many Requests
-
-500 → Server Error
-
-Why it matters:
-Frontend logic depends on proper status codes.
-
-Bad API:
-Always returns 200.
-
-That’s amateur.
-
-🧩 Part 3 — Request & Response Design
+Phase 3 — Response & Error Design
 5. Consistent Response Structure
 
-Design a standard format.
+Learn:
 
-Example:
+Standard success format
 
-{
-  "success": true,
-  "data": {...},
-  "error": null
-}
+Standard error format
 
-Or:
+Metadata inclusion
 
-{
-  "status": "success",
-  "data": {...}
-}
+Resources:
 
-For errors:
+JSON API Spec (for structure ideas)
+https://jsonapi.org/format/
 
-{
-  "status": "error",
-  "message": "Invalid input",
-  "code": 400
-}
-
-Why consistency matters:
-Frontend and mobile apps depend on structure stability.
-
-6. Validation
+6. Error Handling Strategy
 
 Learn:
 
-Zod or Joi
+Centralized error middleware
 
-Input sanitization
+Meaningful error messages
 
-Schema validation
+Avoid leaking internal details
 
-Never trust user input.
+Resources:
 
-ML example:
+Express Error Handling
+https://expressjs.com/en/guide/error-handling.html
 
-File type validation
-
-Image size validation
-
-Max payload size
-
-Required fields
-
-Without validation → memory abuse.
-
-⚡ Part 4 — ML-Specific REST Patterns
-7. Sync vs Async Inference
-
-Small model:
-
-POST /predictions
-
-Return result immediately.
-
-Heavy model:
-
-POST /jobs
-
-Return job ID:
-
-{
-  "jobId": "1234"
-}
-
-Then:
-
-GET /jobs/1234
-
-Why?
-Long-running inference should not block request thread.
-
-This is how serious ML platforms work.
-
-8. Pagination
-
-If listing:
-
-GET /models?page=1&limit=10
+Phase 4 — Versioning & Evolution
+7. API Versioning
 
 Learn:
 
-Offset pagination
+URL versioning (/v1/)
 
-Cursor pagination
+Backward compatibility
 
-Large ML datasets cannot be returned fully.
+Deprecation strategy
 
-9. Filtering & Query Parameters
+Resources:
 
-Use query params properly:
+API Versioning Guide
+https://restfulapi.net/versioning/
 
-GET /predictions?status=completed
-GET /models?type=vision
-
-Don’t mix filters in body for GET requests.
-
-🔐 Part 5 — Security Best Practices
-10. Versioning
-
-Never break existing clients.
-
-Use:
-
-/api/v1/models
-/api/v2/models
-
-When you update prediction format → bump version.
-
-ML models evolve. Your API must handle that.
-
-11. Rate Limiting
+Phase 5 — Security & Stability
+8. Rate Limiting
 
 Learn:
+
+Per-IP limiting
+
+Per-user limiting
+
+Handling 429 responses
+
+Resources:
 
 express-rate-limit
+https://github.com/express-rate-limit/express-rate-limit
 
-429 responses
+9. CORS & Security Headers
 
-IP-based limits
+Learn:
 
-User-tier limits
+CORS configuration
 
-ML endpoints are expensive.
+Secure headers
 
-Without limits:
-Someone can bankrupt your server.
+Basic API hardening
 
-12. Idempotency
+Resources:
 
-Understand:
+CORS Middleware
+https://github.com/expressjs/cors
 
-Idempotent = same request repeated → same result.
+Helmet
+https://helmetjs.github.io/
 
-GET is idempotent
-
-PUT is idempotent
-
-POST usually not
-
-Why this matters:
-Network retries happen.
-
-Your API must behave predictably.
-
-🧪 Part 6 — Production Design Thinking
-13. Logging
-
-Log:
-
-Request ID
-
-User ID
-
-Endpoint
-
-Duration
-
-Errors
-
-Attach request IDs for debugging.
-
-When model fails at 3AM, logs are your only friend.
-
-14. Error Handling Strategy
-
-Centralized error middleware.
-
-Never leak:
-
-Stack traces
-
-Internal DB info
-
-Secret keys
-
-Return clean error messages.
-
-15. API Documentation
+Phase 6 — Documentation & Testing
+10. API Documentation
 
 Learn:
 
@@ -329,43 +164,77 @@ OpenAPI (Swagger)
 
 Postman documentation
 
-Why:
-Your frontend and other developers depend on clarity.
+Resources:
 
-Professional APIs are documented APIs.
+Swagger OpenAPI
+https://swagger.io/specification/
 
-🧠 What Mastery Looks Like
+Postman Learning Center
+https://learning.postman.com/
 
-You can:
+11. API Testing
 
-Design a full ML SaaS API on paper
+Learn:
 
-Separate inference jobs from user routes
+Postman testing
 
-Version your API properly
+Automated API tests
 
-Handle failure cases
+Integration testing basics
 
-Design scalable endpoints
+Resources:
 
-Explain why POST vs PUT matters
+Postman Docs
+https://learning.postman.com/docs/
 
-Without Googling.
+Supertest (Node testing)
+https://github.com/visionmedia/supertest
 
-🧨 Common Beginner Mistakes
+Phase 7 — Production Patterns (Advanced)
+12. Async Processing
 
-Using verbs in URLs
+Learn:
 
-No versioning
+Job-based endpoints
 
-Always returning 200
+Long-running task patterns
 
-No validation
+Polling vs Webhooks
 
-Blocking thread during heavy inference
+Resources:
 
-No rate limits
+REST Long-Running Tasks
+https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design#long-running-operations
 
-Returning massive payloads
+13. Idempotency Keys
 
-Avoid these and you’re already ahead of most early-stage devs.
+Learn:
+
+Prevent duplicate POST operations
+
+Retry-safe APIs
+
+Resource:
+
+Idempotency Explained
+https://stripe.com/docs/idempotency
+
+Execution Order
+
+Master HTTP methods + status codes
+
+Design clean resource-based URLs
+
+Implement pagination + filtering
+
+Standardize responses + errors
+
+Add versioning
+
+Add rate limiting + CORS + Helmet
+
+Document with OpenAPI
+
+Add async job-based endpoints
+
+Implement idempotency
