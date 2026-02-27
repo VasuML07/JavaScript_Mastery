@@ -1,100 +1,65 @@
-🔐 Authentication & Authorization for ML Systems
-JWT + OAuth Mastery Roadmap
-🎯 Objective
-
-Build secure, production-ready authentication systems for ML APIs and full-stack applications using:
-
-JWT (JSON Web Tokens)
-
-OAuth 2.0
-
-Session strategies
-
-Role-based access control
-
-Refresh token architecture
-
-By the end, you should be able to design authentication for:
-
-Public ML APIs
-
-SaaS ML dashboards
-
-Multi-user ML platforms
-
-Enterprise model services
-
-🧠 Part 1 — Foundations (Before JWT)
-1. HTTP & Cookies Basics
+Authentication — JWT & OAuth Roadmap (With Free Resources)
+Phase 1 — Foundations
+1. HTTP, Cookies, Sessions
 
 Learn:
 
-What is HTTP?
+Stateless HTTP
 
-Stateless nature of HTTP
+Cookies (HttpOnly, Secure, SameSite)
 
-Cookies vs LocalStorage
+Sessions vs Tokens
 
-Secure, HttpOnly, SameSite flags
+Resources:
 
-Why it matters:
-ML APIs are stateless. Auth must work without server memory.
+MDN HTTP Overview
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
 
-Free Resources:
+MDN Cookies
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
 
-MDN Web Docs (Cookies)
-
-HTTP Crash Course (YouTube – Traversy Media)
-
-2. Hashing & Password Security
+2. Password Hashing
 
 Learn:
 
-What is hashing?
+Hashing vs Encryption
 
 bcrypt
 
 Salting
 
-Why you NEVER store plain passwords
+Password verification flow
 
-Brute-force attacks
+Resources:
 
-Implement:
+bcrypt npm
+https://www.npmjs.com/package/bcrypt
 
-Register endpoint with bcrypt
+Net Ninja – Password Hashing (YouTube search)
+https://www.youtube.com/results?search_query=net+ninja+bcrypt
 
-Login verification flow
-
-Free Resources:
-
-bcrypt npm docs
-
-“Password Hashing in Node.js” (YouTube – Net Ninja)
-
-🔑 Part 2 — JWT Deep Dive
-3. What is JWT?
+Phase 2 — JWT (Core Skill)
+3. JWT Fundamentals
 
 Learn:
 
-Structure: Header.Payload.Signature
+JWT structure (Header.Payload.Signature)
 
 Base64 encoding
 
 HMAC vs RSA
 
-Signing vs Encryption
+Signing vs encryption
 
-Why JWT is NOT encrypted by default
+Token expiration
 
-Understand deeply:
-JWT is proof of authenticity, not secrecy.
+Resources:
 
-Free Resources:
+JWT Debugger
+https://jwt.io
 
-jwt.io (official debugger)
-
-freeCodeCamp JWT tutorial
+freeCodeCamp JWT Guide
+https://www.freecodecamp.org/news/jwt-authentication-tutorial/
 
 4. Implement JWT (Node + Express)
 
@@ -110,50 +75,38 @@ Middleware protection
 
 Expiry strategy
 
-Build:
+Resources:
 
-Protected /predict endpoint
+jsonwebtoken npm
+https://www.npmjs.com/package/jsonwebtoken
 
-Middleware: verifyToken()
+Express Middleware Docs
+https://expressjs.com/en/guide/using-middleware.html
 
-Attach user to req object
-
-Understand:
-
-Token expiration strategy (15m recommended)
-
-Why short-lived access tokens are safer
-
-5. Refresh Token Architecture
-
-This separates amateurs from serious builders.
+Phase 3 — Refresh Token Architecture
 
 Learn:
 
 Access token vs Refresh token
 
-Rotation strategy
+Token rotation
 
-Storing refresh token in HTTP-only cookies
-
-Token revocation
-
-Blacklisting
-
-Build:
-
-/refresh endpoint
-
-Token rotation logic
+Secure cookie storage
 
 Logout invalidation
 
-Free Resources:
+Token revocation
 
-“JWT Refresh Token Flow” (YouTube – Web Dev Simplified)
+Resources:
 
-🔐 Part 3 — OAuth 2.0 (Serious Systems)
-6. OAuth 2.0 Concepts
+JWT Refresh Token Flow (YouTube search)
+https://www.youtube.com/results?search_query=jwt+refresh+token+node+express
+
+OWASP JWT Cheat Sheet
+https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html
+
+Phase 4 — OAuth 2.0
+5. OAuth Fundamentals
 
 Learn:
 
@@ -161,205 +114,136 @@ Authorization Code Flow
 
 Client ID / Client Secret
 
-Access Token vs ID Token
-
-Redirect URIs
+Redirect URI
 
 Scopes
 
-Grant Types
+Access token vs ID token
 
-Understand:
-OAuth is delegated authorization.
-It lets users log in via Google/GitHub safely.
+Grant types
 
-Free Resources:
+Resources:
 
-OAuth 2.0 Simplified (Aaron Parecki website)
+OAuth 2.0 Simplified
+https://aaronparecki.com/oauth-2-simplified/
 
-freeCodeCamp OAuth 2.0 guide
+OAuth 2.0 Spec
+https://oauth.net/2/
 
-7. Implement OAuth Login
+6. Implement OAuth Login
 
 Learn:
-
-Passport.js or Auth.js
 
 Google OAuth setup
 
 GitHub OAuth setup
 
-Handling callback routes
+Callback handling
 
-Storing OAuth user in DB
+Creating local user after OAuth
 
-Build:
+Issuing your own JWT after OAuth login
 
-“Login with Google”
+Resources:
 
-Auto-create user record
+Passport.js
+https://www.passportjs.org/
 
-Issue your own JWT after OAuth login
+Auth.js (NextAuth)
+https://authjs.dev/
 
-Critical:
-Never rely only on third-party tokens. Always issue your own session token.
+Google OAuth Docs
+https://developers.google.com/identity/protocols/oauth2
 
-🛡️ Part 4 — Authorization (Not Just Login)
-8. Role-Based Access Control (RBAC)
+Phase 5 — Authorization (Access Control)
+7. Role-Based Access Control (RBAC)
 
 Learn:
 
-Roles: admin, user, premium
+Roles (admin, user, premium)
+
+Middleware-based role checks
 
 Permission mapping
 
-Middleware-based role checking
+Resources:
 
-Implement:
+RBAC Guide (YouTube search)
+https://www.youtube.com/results?search_query=rbac+node+express
 
-Only admin can delete models
+OWASP Access Control
+https://owasp.org/www-project-top-ten/
 
-Only premium users can access heavy inference
-
-Free Resource:
-
-RBAC tutorial (YouTube – Code With Antonio)
-
-9. API Security Hardening
+Phase 6 — Security Hardening
 
 Learn:
 
-Rate limiting (express-rate-limit)
-
-Helmet (security headers)
-
-CORS configuration
-
-Input validation (Zod / Joi)
-
-CSRF basics
+Token storage best practices
 
 XSS basics
 
-Understand:
-Most ML APIs get attacked via:
+CSRF basics
 
-Token theft
+Rate limiting
 
-Unvalidated input
+Secure headers (Helmet)
 
-Missing rate limits
+CORS configuration
 
-🚀 Part 5 — Production-Level Thinking
-10. Secure Token Storage
+Resources:
 
-Frontend Rules:
+OWASP Top 10
+https://owasp.org/www-project-top-ten/
 
-Store access token in memory
+Helmet
+https://helmetjs.github.io/
 
-Store refresh token in HTTP-only cookie
+express-rate-limit
+https://github.com/express-rate-limit/express-rate-limit
 
-Never store tokens in localStorage for serious apps
+CORS Middleware
+https://github.com/expressjs/cors
 
-Understand:
-XSS steals localStorage instantly.
-
-11. Distributed Systems Authentication
-
-Learn:
-
-Auth in microservices
-
-Central auth server pattern
-
-Gateway authentication
-
-Token verification in multiple services
-
-Understand:
-In ML infra:
-Auth service != Model service.
-
-12. Logging & Monitoring Auth
+Phase 7 — Production-Level Patterns
 
 Learn:
 
-Log failed login attempts
+Centralized auth service pattern
 
-Detect brute force
+Microservice token verification
 
-Monitor token refresh abuse
+Logging failed logins
 
-Audit trails
+Brute-force protection
 
-Tools:
+Token blacklisting (Redis)
 
-Winston / Pino
+Resources:
 
-Sentry
+Redis Docs
+https://redis.io/docs/
 
-🧪 Practice Projects
+Node Logging (Pino)
+https://getpino.io/#/
 
-Build these in order:
+Execution Order
 
-Basic JWT Auth API
+Password hashing with bcrypt
 
-JWT + Refresh token system
+Basic JWT login system
 
-OAuth (Google) login
+Protected routes with middleware
 
-RBAC system
+Add refresh token system
 
-ML API with protected inference route
+Add logout + token invalidation
 
-Rate-limited prediction endpoint
+Add RBAC
 
-📚 Free Learning Stack Summary
-Topic	Resource
-HTTP Basics	MDN Web Docs
-bcrypt	Net Ninja YouTube
-JWT	freeCodeCamp
-OAuth	OAuth 2.0 Simplified
-Passport.js	Official Docs
-API Security	OWASP Top 10
-🧠 What Mastery Looks Like
+Add rate limiting + Helmet
 
-You understand:
+Implement Google OAuth
 
-Why JWT is stateless
+Issue JWT after OAuth login
 
-Why refresh tokens must be protected
-
-Why OAuth is not authentication (it’s authorization)
-
-Why role checks belong in middleware
-
-Why ML endpoints must be rate limited
-
-How to invalidate tokens safely
-
-When you can design:
-
-Auth flow diagram
-
-Token lifecycle
-
-Failure scenarios
-
-Without Googling — you’re ready.
-
-🧨 Common Beginner Mistakes
-
-Storing JWT in localStorage
-
-No refresh token rotation
-
-No token expiry
-
-No rate limiting
-
-Trusting OAuth provider blindly
-
-No logout invalidation
-
-Avoid these and you’re already ahead of 70% of devs.
+Add Redis-backed token blacklist
