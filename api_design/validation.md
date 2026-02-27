@@ -1,133 +1,8 @@
-🛡 API Validation (Production-Grade for ML Systems)
-🎯 Objective
-
-Design robust validation layers that:
-
-Prevent malformed input
-
-Protect ML models from abuse
-
-Avoid server crashes
-
-Ensure consistent data contracts
-
-Improve security posture
-
-By the end, you should be able to build validation pipelines that make your API resilient under hostile conditions.
-
-🧠 Part 1 — Core Concepts
-1. What Validation Really Is
-
-Validation is:
-
-Structural checking (shape of data)
-
-Type checking
-
-Constraint enforcement
-
-Sanitization
-
-Security filtering
-
-It is NOT:
-
-Just checking if field exists.
-
-Understand:
-Validation belongs at the boundary of your system.
-
-Everything entering your API is untrusted.
-
-2. Types of Validation
-
-You must know the differences:
-
-1. Schema Validation
-
-Ensures structure matches expected format.
-
-Example:
-
-{
-  "email": "string",
-  "password": "string"
-}
-2. Business Logic Validation
-
-Example:
-
-User must be premium to run large model.
-
-Image size must be < 5MB.
-
-Age must be >= 18.
-
-3. Security Validation
-
-Example:
-
-Block script injection
-
-Reject suspicious payload sizes
-
-Restrict file types
-
-⚙ Part 2 — Schema Validation Tools (Node.js)
-3. Zod (Recommended)
+API Validation — Roadmap + Free Resources
+Phase 1 — Foundations
+1. HTTP & Request Structure
 
 Learn:
-
-z.object()
-
-z.string().email()
-
-z.number().min()
-
-Safe parsing
-
-Custom error messages
-
-Type inference (if using TypeScript)
-
-Why Zod is strong:
-
-Type-safe
-
-Clean API
-
-Great for TS projects
-
-Free resource:
-Zod official docs + YouTube tutorials.
-
-4. Joi (Alternative)
-
-Learn:
-
-Schema creation
-
-Middleware integration
-
-Validation options
-
-Understand:
-Joi is mature but less TypeScript-friendly.
-
-🧱 Part 3 — Middleware-Based Validation
-5. Validation Layer Architecture
-
-Correct flow:
-
-Request → Validation Middleware → Controller → Service → Model
-
-Never validate inside controllers.
-
-Separation of concerns keeps code clean.
-
-6. Request Areas to Validate
-
-You must validate:
 
 req.body
 
@@ -135,217 +10,196 @@ req.params
 
 req.query
 
-Headers (sometimes)
+Status codes (400, 422)
 
-Example:
+Resources:
 
-GET /models?page=1&limit=10
+MDN HTTP Overview
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview
 
-Validate:
+Express Request Object
+https://expressjs.com/en/5x/api.html#req
 
-page is number
-
-limit <= 50
-
-Without limit checks:
-Someone requests 1 million rows.
-
-Server dies.
-
-🤖 Part 4 — ML-Specific Validation
-
-This is where most people fail.
-
-7. File Upload Validation
-
-Validate:
-
-File type (MIME)
-
-File extension
-
-Max file size
-
-Image dimensions (if needed)
-
-Content type consistency
-
-Never trust:
-
-File name
-
-Client-side checks
-
-Example failure:
-User uploads 200MB “image”.
-Your inference service crashes.
-
-8. Input Size Limits
-
-Set:
-
-JSON body size limit
-
-Max request payload size
-
-Timeout limits
-
-In Express:
-
-express.json({ limit: '1mb' })
-
-Why:
-Large payload = memory exhaustion attack.
-
-9. Numerical Input Constraints
-
-ML example:
-
-{
-  "age": 999999999,
-  "income": -500000
-}
-
-Without constraints:
-Model predictions become garbage.
-
-Validate:
-
-Ranges
-
-Required fields
-
-Enum values
-
-🔐 Part 5 — Security-Focused Validation
-10. Prevent Injection Attacks
+2. Basic Input Validation Concepts
 
 Learn:
 
-NoSQL injection basics
+Required fields
 
-SQL injection basics
+Type checking
+
+Range validation
+
+Enum validation
+
+Resource:
+
+freeCodeCamp – Node.js API Validation
+https://www.freecodecamp.org/news/how-to-validate-express-requests/
+
+Phase 2 — Schema Validation (Core Skill)
+3. Zod (Recommended for TypeScript)
+
+Learn:
+
+z.object()
+
+z.string(), z.number()
+
+.min(), .max()
+
+.refine()
+
+safeParse()
+
+Custom errors
+
+Resources:
+
+Official Docs
+https://zod.dev
+
+Zod GitHub
+https://github.com/colinhacks/zod
+
+YouTube – Zod Crash Course
+https://www.youtube.com/results?search_query=zod+crash+course
+
+4. Joi (Alternative)
+
+Learn:
+
+Joi.object()
+
+Schema validation
+
+Middleware usage
+
+Resources:
+
+Official Docs
+https://joi.dev
+
+Joi GitHub
+https://github.com/hapijs/joi
+
+Phase 3 — Express Middleware Validation
+
+Learn:
+
+Custom validation middleware
+
+Centralized error handling
+
+Validation before controller logic
+
+Resources:
+
+Express Middleware Guide
+https://expressjs.com/en/guide/using-middleware.html
+
+Central Error Handling (YouTube)
+https://www.youtube.com/results?search_query=express+central+error+handling
+
+Phase 4 — File & Payload Validation (Critical for ML APIs)
+
+Learn:
+
+File upload validation (Multer)
+
+MIME type checking
+
+File size limits
+
+JSON body size limits
+
+Resources:
+
+Multer Docs
+https://github.com/expressjs/multer
+
+Express Body Size Limit
+https://expressjs.com/en/resources/middleware/body-parser.html
+
+Phase 5 — Security Validation
+
+Learn:
+
+Input sanitization
 
 XSS basics
 
-Command injection basics
+SQL/NoSQL injection basics
 
-Use:
+CORS
 
-Sanitization libraries
+Helmet
 
-Strict schema validation
+Resources:
 
-Escaping outputs
+OWASP Top 10
+https://owasp.org/www-project-top-ten/
 
-Free resource:
-OWASP Top 10 (must read)
+Helmet
+https://helmetjs.github.io/
 
-11. Rate-Based Abuse Protection
+CORS Middleware
+https://github.com/expressjs/cors
 
-Validation isn’t only structure.
+Phase 6 — Rate Limiting & Abuse Protection
 
-You must validate:
-
-Too many requests
-
-Repeated login attempts
-
-Excessive inference calls
-
-Use:
+Learn:
 
 express-rate-limit
 
+IP-based limiting
+
 Redis-backed rate limiting
 
-📦 Part 6 — Error Handling Strategy
-12. Standardized Validation Errors
+Resources:
 
-Return consistent structure:
+express-rate-limit
+https://github.com/express-rate-limit/express-rate-limit
 
-{
-  "status": "error",
-  "message": "Validation failed",
-  "errors": [
-    { "field": "email", "message": "Invalid email format" }
-  ]
-}
+Redis
+https://redis.io/docs/
 
-Never leak:
+Phase 7 — Advanced Patterns
 
-Internal stack traces
+Learn:
 
-Library error internals
+Conditional validation
 
-Keep it clean and controlled.
+Cross-field validation
 
-🧪 Part 7 — Advanced Validation Patterns
-13. Conditional Validation
+Versioned schemas
 
-Example:
+DTO pattern
 
-If modelType = "vision", require image.
+Request size limits in production
 
-If modelType = "nlp", require text.
+Resources:
 
-Schema refinement techniques matter here.
+NestJS Validation (for architecture ideas)
+https://docs.nestjs.com/techniques/validation
 
-14. Cross-Field Validation
+OpenAPI Spec
+https://swagger.io/specification/
 
-Example:
+Practice Order (Execution Plan)
 
-startDate must be before endDate.
+Validate simple POST body using Zod
 
-minValue must be less than maxValue.
+Add middleware-based validation
 
-Most beginners ignore cross-field validation.
+Add file upload validation
 
-That’s how logic bugs enter production.
+Add centralized error handler
 
-15. Versioned Schema Validation
+Add rate limiting
 
-When you version API:
+Add payload size limits
 
-/api/v1/predict
-/api/v2/predict
+Implement cross-field validation
 
-Validation schemas must also evolve.
-
-Never break older clients silently.
-
-🧠 What Mastery Looks Like
-
-You:
-
-Validate at boundaries only.
-
-Never trust client input.
-
-Limit payload sizes.
-
-Separate schema and business validation.
-
-Handle file uploads safely.
-
-Return structured error messages.
-
-Understand OWASP risks.
-
-Design validation as part of system architecture.
-
-🧨 Common Beginner Mistakes
-
-Validating only required fields.
-
-Relying on frontend validation.
-
-No payload size limit.
-
-No file type check.
-
-Throwing raw error objects.
-
-Mixing validation and controller logic.
-
-Ignoring edge cases.
+Secure with Helmet + CORS
